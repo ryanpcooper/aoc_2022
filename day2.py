@@ -5,13 +5,14 @@ from aoc_util import *
 lines = getInput(__file__)
 
 def parseTheirChoiceAndMyChoice(them, me): 
-	myChoice = ord(me)-87;
-	theirChoice = ord(them)-64;
+	theirChoice = ord(them)-64; # convert A|B|C -> 1|2|3
+	myChoice = ord(me)-87;      # convert X|Y|Z -> 1|2|3
 	return (theirChoice, myChoice)
 	
 def parseTheirChoiceAndDesiredResult(them, desiredResult):
-	theirChoice = ord(them)-64;
-	myChoice = (theirChoice + ord(desiredResult)-89)%3 or 3
+	theirChoice = ord(them)-64;           # convert A|B|C -> 1|2|3
+	desiredResult = ord(desiredResult)-89 # convert X|Y\Z -> -1|0|1
+	myChoice = (theirChoice + desiredResult)%3 or 3    # figure out my choice (1|2|3)
 	return (theirChoice, myChoice)
 
 def getRoundScore(theirChoice, myChoice):
