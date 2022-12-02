@@ -4,20 +4,25 @@ from aoc_util import *
 
 lines = getInput(__file__)
 
-# part 1
-def roundScore1(them, me):
+def parseTheirChoiceAndMyChoice(them, me): 
 	myChoice = ord(me)-87;
 	theirChoice = ord(them)-64;
-	resultPoints = [3, 6, 0][(myChoice-theirChoice)%3]
-	return resultPoints + myChoice
-scores = list(map(lambda l: roundScore1(*l.split(" ")), lines))
-print(sum(scores))
-
-# part 2
-def roundScore2(them, desiredResult):
+	return (theirChoice, myChoice)
+	
+def parseTheirChoiceAndDesiredResult(them, desiredResult):
 	theirChoice = ord(them)-64;
 	myChoice = (theirChoice + ord(desiredResult)-89)%3 or 3
+	return (theirChoice, myChoice)
+
+def getRoundScore(theirChoice, myChoice):
 	resultPoints = [3, 6, 0][(myChoice-theirChoice)%3]
 	return resultPoints + myChoice
-scores = list(map(lambda l: roundScore2(*l.split(" ")), lines))
-print(sum(scores))
+
+def getTotalScore(parseFunction, lines):
+	return sum(list(map(lambda l: getRoundScore(*parseFunction(*l.split(" "))), lines)))
+
+# part 1
+print(getTotalScore(parseTheirChoiceAndMyChoice, lines))
+	
+# part 2
+print(getTotalScore(parseTheirChoiceAndDesiredResult, lines))
