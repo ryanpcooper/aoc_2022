@@ -9,8 +9,8 @@ def split(string):
 	halfway = len(string)//2
 	return (string[:halfway], string[halfway:])
 
-def prioritySet(compartment):
-	return set(map(lambda ch: priority(ch), compartment))
+def prioritySet(string):
+	return set(map(lambda ch: priority(ch), string))
 
 # part 1
 rucksacks = list(map(lambda l: list(map(lambda c: prioritySet(c), split(l))), lines))
