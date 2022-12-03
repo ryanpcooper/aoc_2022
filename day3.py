@@ -10,7 +10,7 @@ def split(string):
 	return (string[:halfway], string[halfway:])
 
 def priorities(string):
-	return list(map(lambda ch: priority(ch), string))
+	return transform(string, priority)
 
 # part 1
 rucksacks = transform(lines, priorities, split)
