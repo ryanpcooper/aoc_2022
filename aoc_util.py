@@ -13,3 +13,10 @@ def getInput(scriptFile):
 
 def split(l, delimiter):
 	return [list(y) for x, y in itertools.groupby(l, lambda z: z == delimiter) if not x]
+
+def flatten(list_of_lists):
+	return list(itertools.chain(*list_of_lists))
+
+def group(lst, groupSize):
+	return [lst[i:i+groupSize] for i in range(0, len(lst), groupSize)]
+	
