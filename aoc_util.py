@@ -20,3 +20,10 @@ def flatten(list_of_lists):
 def group(lst, groupSize):
 	return [lst[i:i+groupSize] for i in range(0, len(lst), groupSize)]
 	
+def transform(lst, *argv):
+	for arg in argv:
+		lst = list(map(arg, lst))
+	return lst
+
+def intersection(list_of_sets):
+	return set.intersection(*list_of_sets)
