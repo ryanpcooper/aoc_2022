@@ -25,5 +25,6 @@ def transform(lst, *argv):
 		lst = list(map(arg, lst))
 	return lst
 
-def intersection(list_of_sets):
+def intersection(list_of_lists):
+	list_of_sets = transform(list_of_lists, set)
 	return set.intersection(*list_of_sets)
