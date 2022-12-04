@@ -3,7 +3,7 @@ import re
 
 lines = getInput(__file__)
 
-def fulL_overlap(p):
+def full_overlap(p):
 	return (p[0] <= p[2] and p[1] >= p[3]) or (p[2] <= p[0] and p[3] >= p[1])
 	
 def partial_overlap(p):
@@ -13,7 +13,7 @@ def partial_overlap(p):
 
 # part 1
 pairs = transform(lines, lambda l: transform(re.split(',|-', l)), strings_to_ints)
-overlaps = list(filter(fulL_overlap, pairs))
+overlaps = list(filter(full_overlap, pairs))
 print(len(overlaps))
 
 # part 2
