@@ -9,7 +9,7 @@ def full_overlap(p):
 def partial_overlap(p):
 	elf1_sections = set(range(p[0], p[1]+1)) # ranges are exclusive of end point
 	elf2_sections = set(range(p[2], p[3]+1)) # ranges are exclusive of end point
-	overlap = len(elf1_sections.intersection(elf2_sections)) > 0
+	return len(elf1_sections.intersection(elf2_sections)) > 0
 
 # part 1
 pairs = transform(lines, lambda l: transform(re.split(',|-', l)), strings_to_ints)
