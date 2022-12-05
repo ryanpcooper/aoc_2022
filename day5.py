@@ -1,5 +1,4 @@
 from aoc_util import *
-import re
 
 def build_stack(stack_defs, i):
 	start = i*4+1
