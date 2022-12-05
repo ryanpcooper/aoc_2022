@@ -23,8 +23,6 @@ def execute_move_9000(stacks, qty, fr, to):
 		stacks[to-1].append(stacks[fr-1].pop())
 		
 def execute_move_9001(stacks, qty, fr, to):
-	print(qty)
-	print(stacks[fr-1][-qty:])
 	stacks[to-1] = stacks[to-1] + stacks[fr-1][-qty:]
 	stacks[fr-1] = stacks[fr-1][:-qty]
 
