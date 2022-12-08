@@ -4,6 +4,13 @@ import itertools
 import os
 import sys
 
+def commaSeparate(*args):
+	string = ''
+	for arg in args:
+		string += str(arg)
+		string += ','
+	return string[:-1]
+
 def getInput(scriptFile):
 	inputFileName = os.path.splitext(os.path.basename(scriptFile))[0] + '.txt'
 	if len(sys.argv) > 1:
