@@ -1,9 +1,5 @@
 from aoc_util import *
 
-lines = getInput(__file__)
-
-
-
 class Orchard:
 	def __init__(self, lines):
 		self.matrix = [] # y, x
@@ -71,6 +67,7 @@ class Orchard:
 					best = candidate
 		return best
 
+lines = getInput(__file__)
 orchard = Orchard(lines)
 		
 # part 1
