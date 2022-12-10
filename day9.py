@@ -69,22 +69,6 @@ class Rope:
 					if abs(y_diff) != 2:
 						this.y = prev.y
 			self.tail_positions.add(self.knots[-1].copy())
-		#self.print_matrix(-5, 5, -5, 5)
-			
-	def print_matrix(self, min_x, max_x, min_y, max_y):
-		for y in range(max_y, min_y-1, -1):
-			line = ''
-			for x in range(min_x, max_x+1):
-				if x == 0 and y == 0:
-					line += 's'
-				elif Point(x, y) in self.knots:
-					line += str(self.knots.index(Point(x, y)))
-				elif Point(x, y) in self.tail_positions:
-					line += '#'
-				else:
-					line += '.'
-			print(line)
-		print('')
 
 # part 1
 rope = Rope(2)
@@ -95,7 +79,6 @@ print(len(rope.tail_positions))
 # part 2
 rope = Rope(10)
 for line in lines:
-	#print(line)
 	rope.move(*line.split())
 print(len(rope.tail_positions))
 
