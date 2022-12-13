@@ -61,7 +61,6 @@ def create_packet(line):
 
 # part 1
 packet_pairs = split(transform(lines, create_packet), None)
-print(commaSeparate(transform(packet_pairs, lambda p: commaSeparate(*p))))
 sum = 0
 for i in range(0, len(packet_pairs)):
 	if packet_pairs[i][0] < packet_pairs[i][1]:
