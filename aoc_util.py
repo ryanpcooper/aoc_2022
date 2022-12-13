@@ -19,7 +19,16 @@ def getInput(scriptFile):
 		return [line.rstrip('\n') for line in f]
 
 def split(l, delimiter):
-	return [list(y) for x, y in itertools.groupby(l, lambda z: z == delimiter) if not x]
+	lol = []
+	current_list = []
+	for i in l:
+		if i == delimiter:
+			lol.append(current_list)
+			current_list = []
+		else:
+			current_list.append(i)
+	lol.append(current_list)
+	return lol
 
 def flatten(list_of_lists):
 	return list(itertools.chain(*list_of_lists))
