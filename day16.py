@@ -92,7 +92,7 @@ class DualPathState:
 	def __str__(self):
 		return str(self.path_state_1) + "; " + str(self.path_state_2) + "; " + str(self.waste) + "; " + str(self.waste_per_minute)
 	
-def find_best_dual_path(valves, path_state_1, path_state_2, best_so_far):
+def find_best_paths(valves, path_state_1, path_state_2, best_so_far):
 	if path_state_1.timer >= TIMER_2 and path_state_2.timer >= TIMER_2:
 		return [path_state_1, path_state_2] 
 	if len(path_state_1.opened) + len(path_state_2.opened) == len(valves):
@@ -187,14 +187,10 @@ print(str(max_pressure-least_wasteful_so_far.waste))
 
 # part 2
 best_so_far = None
-tried_pairs = []
 for valve_1 in valves_to_open:
 	for valve_2 in valves_to_open:
 		if valve_2.name == valve_1.name:
 			continue
-		if [valve_2.name, valve_1.name] in tried_pairs:
-			continue
-		tried_pairs.append([valve_1.name, valve_2.name])
 		print("Trying " + str(valve_1) + " and " + str(valve_2))
 		
 		path_state_1 = PathState2([valve_1.name], valve_1, valve_1.initial_cost, 0, valve_1.rate)
