@@ -111,6 +111,8 @@ def simulate(count, allow_shortcut=False):
 			this_height = cave.height()
 			
 			look_back = 1
+			# Look back and verify cave state matches until we find a fully blocked row.
+			# This guarantees a true repeated-state scenario unlike Bront's YOLO solution.
 			while cave.map[prev_height-look_back] == cave.map[this_height-look_back]:
 				if cave.map[this_height-look_back] == ['#']*CAVE_WIDTH:
 					repeat_interval = i-prev_iter
