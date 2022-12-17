@@ -105,7 +105,7 @@ def simulate(count, allow_shortcut=False):
 				cave.draw_new_rock(rock, rock_loc)
 		
 		deja_vu = pattern_finder.get((rock_index, move_index))
-		if allow_shortcut and deja_vu != None and deja_vu[1] > 3:
+		if allow_shortcut and deja_vu != None:
 			prev_height = deja_vu[1]
 			prev_iter = deja_vu[0]
 			this_height = cave.height()
