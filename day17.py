@@ -80,8 +80,6 @@ def simulate(count, allow_shortcut=False):
 	bonus_height = 0
 	i = 0
 	while i < count:
-		if i % 100000 == 0:
-			print("Dropping rock " + str(i))
 		rock_index = i%5
 		rock = ROCKS[rock_index]
 		rock_loc = Point(2, cave.height() + 3)
