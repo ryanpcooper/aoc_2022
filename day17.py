@@ -37,29 +37,21 @@ class Cave:
 			return False
 		for rock_rel_point in rock.points:
 			point_in_cave = shifted.shift(rock_rel_point.x, rock_rel_point.y)
-			#print("Checking point: " + str(point_in_cave))
 			if point_in_cave.y >= self.height():
 				continue
 			elif self.map[point_in_cave.y][point_in_cave.x] == '#':
-				#print("There's a rock there")
 				return False
-			#else:
-				#print("All clear")
 		return True
 		
 	def height(self):
 		return len(self.map)
 	
 	def draw_new_rock(self, rock, rock_loc):
-		#self.draw()
-		#print("drawing rock at location: " + str(rock_loc))
 		for rock_rel_point in rock.points:
 			point_in_cave = rock_loc.shift(rock_rel_point.x, rock_rel_point.y)
 			while point_in_cave.y >= self.height():
 				self.map.append([' ']*CAVE_WIDTH)
-			#print("Trying to draw point " + str(point_in_cave));
 			self.map[point_in_cave.y][point_in_cave.x] = '#'
-		#self.draw()
 			
 	def draw(self):
 		for i in range(self.height()-1, -1, -1):
@@ -77,45 +69,69 @@ ROCKS = [
 	Rock((0,0),(0,1),(0,2),(0,3)),       # vertical line
 	Rock((0,0),(0,1),(1,0),(1,1))        # block
 ]
-ROCK_COUNT = 2022
-#ROCK_COUNT = 2
+
 CAVE_WIDTH = 7
 
-cave = Cave()
-move_index = 0
-for i in range(0, ROCK_COUNT):
-	print("Dropping rock " + str(i))
-	rock = ROCKS[i%5]
-	rock_loc = Point(2, cave.height() + 3)
-	landed = False
+def simulate(count, allow_shortcut=False):
+	pattern_finder = {}
+	deja_vu_matcher = {}
+	cave = Cave()
+	move_index = 0
+	bonus_height = 0
+	i = 0
+	while i < count:
+		if i % 100000 == 0:
+			print("Dropping rock " + str(i))
+		rock_index = i%5
+		rock = ROCKS[rock_index]
+		rock_loc = Point(2, cave.height() + 3)
+		landed = False
 
-	while not landed:
-		move = moves[move_index]
-		move_index += 1
-		if move_index >= len(moves):
-			move_index = 0
+		while not landed:
+			move = moves[move_index]
+			move_index += 1
+			if move_index >= len(moves):
+				move_index = 0
 		
-		if move == '<':
-			#print("pushing left")
-			direction = (-1, 0)
-		else:
-			#print("pushing right")
-			direction = (1, 0)
-		if cave.move_is_legal(rock, rock_loc, direction):
-			rock_loc = rock_loc.shift(*direction)
-		#else:
-		#	print("blocked")
-		#cave.draw()
-		#print("falling rock at " + str(rock_loc))
+			if move == '<':
+				direction = (-1, 0)
+			else:
+				direction = (1, 0)
+			if cave.move_is_legal(rock, rock_loc, direction):
+				rock_loc = rock_loc.shift(*direction)
 		
-		direction = (0, -1)
-		if cave.move_is_legal(rock, rock_loc, direction):
-			rock_loc = rock_loc.shift(*direction)
-			#cave.draw()
-			#print("rock falls to " + str(rock_loc))
-		else:
-			landed = True
-			cave.draw_new_rock(rock, rock_loc)
-			#cave.draw()
-			#print("The eagle has landed")
-print(cave.height())	
+			direction = (0, -1)
+			if cave.move_is_legal(rock, rock_loc, direction):
+				rock_loc = rock_loc.shift(*direction)
+			else:
+				landed = True
+				cave.draw_new_rock(rock, rock_loc)
+		
+		deja_vu = pattern_finder.get((rock_index, move_index))
+		if allow_shortcut and deja_vu != None and deja_vu[1] > 3:
+			prev_height = deja_vu[1]
+			prev_iter = deja_vu[0]
+			this_height = cave.height()
+			
+			look_back = 1
+			while cave.map[prev_height-look_back] == cave.map[this_height-look_back]:
+				if cave.map[this_height-look_back] == ['#']*CAVE_WIDTH:
+					repeat_interval = i-prev_iter
+					height_diff = this_height-prev_height
+					remaining_iters = count - i
+					remainder = remaining_iters % repeat_interval
+					i = count-remainder
+					repeat_count = int(remaining_iters/repeat_interval)
+					bonus_height = (repeat_count * height_diff)
+					allow_shortcut = False
+					break
+				look_back += 1
+		pattern_finder[(rock_index, move_index)] = (i, cave.height())
+		i += 1
+	return cave.height() + bonus_height
+
+# part 1
+print(simulate(2022))
+
+# part 2
+print(simulate(1000000000000, allow_shortcut=True))
