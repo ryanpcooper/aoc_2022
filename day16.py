@@ -64,6 +64,42 @@ def find_best_path(valves, path_state, least_wasteful_so_far):
 		if least_wasteful_so_far == None or best.waste < least_wasteful_so_far.waste:
 			least_wasteful_so_far = best
 	return least_wasteful_so_far
+
+# part 1
+
+valves = transform(lines, parse_valve)
+valves_to_open = list(filter(lambda v: v.rate > 0, valves))
+valves_to_open.sort(reverse=True, key=lambda v: v.rate) # sort in priority order highest rate first
+
+#print(commaSeparate(transform(valves_to_open, str)))
+
+# populates Valve.costs and Valve.initial_cost for all valves we want to open
+graph = Graph()
+for valve in valves:
+	for destination in valve.destinations:
+		graph.add_edge(valve.name, destination, 1)
+#print(graph)
+for valve in valves_to_open:
+	valve.initial_cost = find_path(graph, 'AA', valve.name).total_cost + 1 # +1 to open the value
+for valve in valves_to_open:
+	for other in valves_to_open:
+		if valve.name == other.name:
+			continue
+		valve.costs[other.name] = find_path(graph, valve.name, other.name).total_cost + 1 # +1 to open the value
+
+max_pressure_per_min = sum(transform(valves_to_open, lambda v: v.rate))
+max_pressure = max_pressure_per_min * TIMER_1
+
+least_wasteful_so_far = None
+for valve in valves_to_open:
+	path_state = PathState([valve.name], valve, valve.initial_cost, valve.initial_cost * max_pressure_per_min, max_pressure_per_min-valve.rate)
+	best_path = find_best_path(valves_to_open, path_state, None)
+	if least_wasteful_so_far == None or best_path.waste < least_wasteful_so_far.waste:
+		least_wasteful_so_far = best_path
+print(str(max_pressure-least_wasteful_so_far.waste))
+	
+
+# part 2
 	
 class PathState2:
 	def __init__(self, opened, current, timer, pressure, pressure_per_minute):
@@ -78,19 +114,6 @@ class PathState2:
 		
 	def __str__(self):
 		return str(self.opened) + ": " + str(self.pressure) + " (" + str(self.timer) + ", " + str(self.pressure_per_minute)+ ")"
-	
-class DualPathState:
-	def __init__(self, path_state_1, path_state_2, waste, waste_per_min):
-		self.path_state_1 = path_state_1
-		self.path_state_2 = path_state_2
-		self.waste = waste
-		self.waste_per_min = waste_per_min
-	
-	def copy(self):
-		return DualPathState(self.path_state_1.copy(), self.path_state_2.copy(), self.waste, self.waste_per_minute)
-		
-	def __str__(self):
-		return str(self.path_state_1) + "; " + str(self.path_state_2) + "; " + str(self.waste) + "; " + str(self.waste_per_minute)
 	
 def find_best_paths(valves, path_state_1, path_state_2, best_so_far):
 	if path_state_1.timer >= TIMER_2 and path_state_2.timer >= TIMER_2:
@@ -124,13 +147,9 @@ def find_best_paths(valves, path_state_1, path_state_2, best_so_far):
 		path_state = path_state_2
 		other_path = path_state_1
 	
-	#print("Active Path: " + str(path_state))
-	#print("Passive Path: " + str(other_path))
-	
 	for valve in valves:
 		if valve.name in path_state_1.opened or valve.name in path_state_2.opened:
 			continue # not a valid next step
-		#print("Trying: " + valve.name)
 		cost = path_state.current.costs[valve.name]
 		new_path_state = path_state.copy()
 		new_path_state.opened.append(valve.name)
@@ -146,46 +165,6 @@ def find_best_paths(valves, path_state_1, path_state_2, best_so_far):
 			best_so_far = best
 	return best_so_far
 
-valves = transform(lines, parse_valve)
-valves_to_open = list(filter(lambda v: v.rate > 0, valves))
-valves_to_open.sort(reverse=True, key=lambda v: v.rate) # sort in priority order highest rate first
-
-#print(commaSeparate(transform(valves_to_open, str)))
-
-# populates Valve.costs and Valve.initial_cost for all valves we want to open
-graph = Graph()
-for valve in valves:
-	for destination in valve.destinations:
-		graph.add_edge(valve.name, destination, 1)
-#print(graph)
-for valve in valves_to_open:
-	valve.initial_cost = find_path(graph, 'AA', valve.name).total_cost + 1 # +1 to open the value
-for valve in valves_to_open:
-	for other in valves_to_open:
-		if valve.name == other.name:
-			continue
-		valve.costs[other.name] = find_path(graph, valve.name, other.name).total_cost + 1 # +1 to open the value
-	#print(valve)
-	#print(valve.initial_cost)
-	#print(valve.costs)
-valve_map = { valve.name: valve for valve in valves_to_open }
-
-# part 1
-max_pressure_per_min = sum(transform(valves_to_open, lambda v: v.rate))
-max_pressure = max_pressure_per_min * TIMER_1
-
-least_wasteful_so_far = None
-for valve in valves_to_open:
-	path_state = PathState([valve.name], valve, valve.initial_cost, valve.initial_cost * max_pressure_per_min, max_pressure_per_min-valve.rate)
-	best_path = find_best_path(valves_to_open, path_state, None)
-	if least_wasteful_so_far == None or best_path.waste < least_wasteful_so_far.waste:
-		least_wasteful_so_far = best_path
-		#print("new best: " + str(least_wasteful_so_far))
-#print(str(max_pressure))
-#print(str(least_wasteful_so_far.waste))
-print(str(max_pressure-least_wasteful_so_far.waste))
-
-# part 2
 best_so_far = None
 for valve_1 in valves_to_open:
 	for valve_2 in valves_to_open:
@@ -198,7 +177,4 @@ for valve_1 in valves_to_open:
 		best_paths = find_best_paths(valves_to_open, path_state_1, path_state_2, None)
 		if best_so_far == None or best_paths[0].pressure + best_paths[1].pressure > best_so_far[0].pressure + best_so_far[1].pressure:
 			best_so_far = best_paths
-			#print("new best: " + str(best_so_far[0]) + ", " + str(best_so_far[1]))
-		#else:
-			#print("not good enough: " + str(best_paths[0]) + ", " + str(best_paths[1]))
 print(str(best_so_far[0].pressure + best_so_far[1].pressure))
