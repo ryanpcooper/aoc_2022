@@ -119,6 +119,7 @@ def simulate(count, allow_shortcut=False):
 					height_diff = this_height-prev_height
 					remaining_iters = count - i
 					remainder = remaining_iters % repeat_interval
+					# "fast forward" to just before the finish line and do the last few iters normally
 					i = count-remainder
 					repeat_count = int(remaining_iters/repeat_interval)
 					bonus_height = (repeat_count * height_diff)
