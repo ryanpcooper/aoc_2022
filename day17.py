@@ -74,7 +74,6 @@ CAVE_WIDTH = 7
 
 def simulate(count, allow_shortcut=False):
 	pattern_finder = {}
-	deja_vu_matcher = {}
 	cave = Cave()
 	move_index = 0
 	bonus_height = 0
