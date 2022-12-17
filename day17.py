@@ -25,6 +25,17 @@ class Rock:
 	def shift(self, x, y):
 		self.points = transform(self.points, lambda p: p.shift(x, y))
 
+# lower left = (0,0)
+ROCKS = [
+	Rock((0,0),(1,0),(2,0),(3,0)),       # minus
+	Rock((0,1),(1,0),(1,1),(1,2),(2,1)), # plus
+	Rock((0,0),(1,0),(2,0),(2,1),(2,2)), # backwards L
+	Rock((0,0),(0,1),(0,2),(0,3)),       # vertical line
+	Rock((0,0),(0,1),(1,0),(1,1))        # block
+]
+
+CAVE_WIDTH = 7
+
 class Cave: 
 	def __init__(self):
 		self.map = [] # two-dimensional array of width CAVE_WIDTH
@@ -60,17 +71,6 @@ class Cave:
 
 lines = getInput(__file__)
 moves = list(lines[0])
-
-# defined as lower left = (0,0)
-ROCKS = [
-	Rock((0,0),(1,0),(2,0),(3,0)),       # minus
-	Rock((0,1),(1,0),(1,1),(1,2),(2,1)), # plus
-	Rock((0,0),(1,0),(2,0),(2,1),(2,2)), # backwards L
-	Rock((0,0),(0,1),(0,2),(0,3)),       # vertical line
-	Rock((0,0),(0,1),(1,0),(1,1))        # block
-]
-
-CAVE_WIDTH = 7
 
 def simulate(count, allow_shortcut=False):
 	pattern_finder = {}
