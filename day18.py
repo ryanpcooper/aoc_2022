@@ -13,21 +13,14 @@ for i in range(SPACE_SIZE):
 		for k in range(SPACE_SIZE):
 			space[i][j].append(False)
 
-def count_exposed_faces(space):
+def count_exposed_faces(space, points):
 	exposed_faces = 0
-	points = transform(lines, lambda l: transform(l.split(','), int))
-	for point in points:
-		x, y, z = point
-		space[x][y][z] = True
 	for point in points:
 		x, y, z = point
 		for d in DIRECTIONS:
 			if space[x + d[0]][y + d[1]][z + d[2]] == False:
 				exposed_faces += 1
 	return exposed_faces
-
-# part 1
-print(count_exposed_faces(space))
 
 def find_escape_route(space, visited):
 	start_size = len(visited)
@@ -53,6 +46,15 @@ def fill_in_pockets(space):
 				if not find_escape_route(space, set([point])):
 					space[x][y][z] = True
 
+
+points = transform(lines, lambda l: transform(l.split(','), int))
+for point in points:
+	x, y, z = point
+	space[x][y][z] = True
+		
+# part 1
+print(count_exposed_faces(space, points))
+
 # part 2
 fill_in_pockets(space)
-print(count_exposed_faces(space))
+print(count_exposed_faces(space, points))
