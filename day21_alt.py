@@ -1,5 +1,4 @@
 from aoc_util import *
-import time
 
 ROOT = "root"
 HUMAN = "humn"
