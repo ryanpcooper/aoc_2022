@@ -62,6 +62,9 @@ def contains_solvable_variable(op):
 		if not part.isnumeric() and not part == HUMAN and not part in ['-','+','*','/','(',')']:
 			return True
 	return False
+	
+def eval_human_value(expr, guess):
+	return int(eval(expr.replace(HUMAN, str(guess))))
 
 root_left  = monkey_map[ROOT].split()[0]
 root_right = monkey_map[ROOT].split()[2]
@@ -77,29 +80,24 @@ guess = 1
 left_expression = monkey_map[root_left]
 right_expression = monkey_map[root_right]
 
-left_val  = str(int(eval(left_expression.replace(HUMAN, str(guess)))))
-right_val = str(int(eval(right_expression.replace(HUMAN, str(guess)))))
-if left_val > right_val:
-	greater_side = root_left
-	lesser_side = root_right
-	gval = left_val
-	lval = right_val
+left_val  = eval_human_value(left_expression, guess)
+right_val = eval_human_value(right_expression, guess)
+
+if eval_human_value(left_expression, guess) > eval_human_value(right_expression, guess):
+	greater_expr = left_expression
+	lesser_expr  = right_expression
 else:
-	greater_side = root_right
-	lesser_side = root_left
-	gval = right_val
-	lval = left_val
+	greater_expr = right_expression
+	lesser_expr  = left_expression
 	
 multiple = 1.0
-while gval > lval:
+while eval_human_value(greater_expr, guess) > eval_human_value(lesser_expr, guess):
 	prev_guess = guess
 	guess = int(guess + guess*multiple)
-	gval  = int(eval(monkey_map[greater_side].replace(HUMAN, str(guess))))
-	lval = int(eval(monkey_map[lesser_side].replace(HUMAN, str(guess))))
-	if gval < lval:
+	gval  = eval_human_value(greater_expr, guess)
+	lval = eval_human_value(lesser_expr, guess)
+	if eval_human_value(greater_expr, guess) < eval_human_value(lesser_expr, guess): # we overshot
 		guess = prev_guess # rewind
-		gval  = int(eval(monkey_map[greater_side].replace(HUMAN, str(guess))))
-		lval = int(eval(monkey_map[lesser_side].replace(HUMAN, str(guess))))
 		multiple = multiple/2 # narrow down the jump between guesses
 print(guess)
 
