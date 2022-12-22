@@ -30,31 +30,19 @@ class WeirdBoard:
 		self.position = (0, self.matrix[0].index(TILE))
 		self.facing = RIGHT
 		self.draw()
-		print("Initial position: " + str(self.position))
-		print("Initial facing: " + str(self.facing))
-		
 	
 	def do(self, instruction):
-		print("Instruction: " + str(instruction))
 		if isinstance(instruction, int):
-			print("    Old position:  " + str(self.position))
 			for i in range(instruction):
 				success = self.move_forward()
 				if not success:
 					break
-				if i == instruction-1:
-					print("Full move!")
-			print("    New position:  " + str(self.position))
 		elif instruction == 'R':
-			print("    Old facing:    " + str(self.facing))
 			self.facing += 1
 			self.facing = self.facing % 4
-			print("    New facing:    " + str(self.facing))
 		else:
-			print("    Old facing:    " + str(self.facing))
 			self.facing -= 1
 			self.facing = self.facing % 4
-			print("    New facing:    " + str(self.facing))
 		self.draw()
 			
 	def move_forward(self):
@@ -64,7 +52,6 @@ class WeirdBoard:
 		destination_x = (self.position[1] + direction[1]) % len(self.matrix[0])
 		destination = self.matrix[destination_y][destination_x]
 		if destination == WALL:
-			print("Blocked by wall")
 			return False
 		elif destination == VOID:
 			while destination == VOID:
@@ -72,22 +59,15 @@ class WeirdBoard:
 				destination_x = (destination_x + direction[1]) % len(self.matrix[0])
 				destination = self.matrix[destination_y][destination_x]
 			if destination == WALL:
-				print("Can't wrap due to wall at destination")
 				return False
 			else:
-				print("Wrapping")
 				self.position = (destination_y, destination_x)
 		else:
-			print("Walking")
 			self.position = (destination_y, destination_x)
 		return True
 	
 	def col(self):
 		return self.position[1]+1
-		#my_row = self.matrix[self.position[0]]
-		#void_count = ''.join(my_row[:self.position[1]]).count(VOID)
-		#y_pos = self.position[1]+1 
-		#return y_pos-void_count
 	
 	def row(self):
 		return self.position[0]+1
@@ -123,7 +103,4 @@ print(instructions)
 
 for instruction in instructions:
 	board.do(instruction)
-print("row: " + str(board.row()))
-print("col: " + str(board.col()))
-print("facing: " + str(board.facing))
 print(1000*board.row() + 4*board.col() + board.facing)
