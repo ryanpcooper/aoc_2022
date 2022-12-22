@@ -48,3 +48,9 @@ def intersection(list_of_lists):
 
 def strings_to_ints(list_of_strings):
 	return transform(list_of_strings, int)
+	
+def find(lst, predicate):
+	matches = list(filter(predicate, lst))
+	if len(matches) != 1:
+		raise Exception("Unexpected number of matches: " + str(len(matches)))
+	return matches[0]
