@@ -17,7 +17,7 @@ def getInput(scriptFile):
 		inputFileName = sys.argv[1] + '.txt'
 	with open(inputFileName, 'r', encoding='latin-1') as f:
 		lines = [line.rstrip('\n') for line in f]
-		return list(filter(lambda l: not l.startswith('#'), lines))
+		return lines
 
 def split(l, delimiter):
 	lol = []

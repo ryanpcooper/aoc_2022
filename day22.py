@@ -29,9 +29,10 @@ class WeirdBoard:
 				row.append(VOID)
 		self.position = (0, self.matrix[0].index(TILE))
 		self.facing = RIGHT
-		
+		self.draw()
 		print("Initial position: " + str(self.position))
 		print("Initial facing: " + str(self.facing))
+		
 	
 	def do(self, instruction):
 		print("Instruction: " + str(instruction))
