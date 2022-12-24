@@ -57,8 +57,7 @@ def find_target(elf, elves, directions):
 			if destination in elves:
 				good = False
 		if good:
-			destination = elf.shift(direction[1])
-			return destination
+			return elf.shift(direction[1])
 			
 	return elf.copy()
 
