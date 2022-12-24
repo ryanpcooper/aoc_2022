@@ -8,6 +8,7 @@ NORTH = [(-1, -1),(-1,0),(-1,1)]
 SOUTH = [(1, -1),(1,0),(1,1)]
 WEST = [(-1,-1),(0,-1),(1,-1)]
 EAST = [(-1,1),(0,1),(1,1)]
+directions = [NORTH, SOUTH, WEST, EAST]	
 
 class Point: 
 	def __init__(self, x, y):
@@ -28,8 +29,6 @@ class Point:
 	
 	def copy(self):
 		return Point(self.x, self.y)
-
-directions = [NORTH, SOUTH, WEST, EAST]	
 
 def parse_elves(lines):
 	elves = set()
