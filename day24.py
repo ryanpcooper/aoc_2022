@@ -82,14 +82,12 @@ def explore(paths, hurricanes, valley_height, valley_width):
 					new_paths.append(path + [target])
 	return new_paths
 
+# part 1
 valley_height = len(lines)
 valley_width = len(lines[0])
 
 hurricanes = parse_hurricanes(lines)
 
-
-
-# part 1
 starting_position = Point(1,0)
 destination = Point(valley_width-2, valley_height-1)
 
