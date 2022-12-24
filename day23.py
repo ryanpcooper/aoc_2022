@@ -32,46 +32,39 @@ class Point:
 directions = [NORTH, SOUTH, WEST, EAST]	
 
 def parse_elves(lines):
-	elves = []
+	elves = set()
 	for y in range(len(lines)):
 		line = lines[y]
 		for x in range(len(line)):
 			c = line[x]
 			if c == '#':
-				elves.append(Point(x, y))
+				elves.add(Point(x, y))
 	return elves	
 
 def find_target(elf, elves, directions):
-	#print("finding target for " + str(elf))
 	alone = True
 	for direction in directions:
 		for subdirection in direction:
 			destination = elf.shift(subdirection)
-			#print("checking " + str(destination))
 			if destination in elves:
-				#print("destination occupied")
 				alone = False
 	if alone:
-		#print("standing still")
 		return elf.copy()
 		
 	for direction in directions:
 		good = True
 		for subdirection in direction:
 			destination = elf.shift(subdirection)
-			#print("checking " + str(destination))
 			if destination in elves:
-			#	print("destination occupied")
 				good = False
 		if good:
 			destination = elf.shift(direction[1])
-			#print("moving to " + str(destination))
 			return destination
-	#print("standing still")
+			
 	return elf.copy()
 
 def move(old_elves, directions):
-	new_elves = []
+	new_elves = set()
 	targets = {}
 	for elf in old_elves: 
 		target = find_target(elf, old_elves, directions)
@@ -82,9 +75,9 @@ def move(old_elves, directions):
 	for target in targets.keys():
 		movers = targets[target]
 		if len(movers) == 1:
-			new_elves.append(target)
+			new_elves.add(target)
 		else:
-			new_elves.extend(movers)
+			new_elves.update(movers)
 	return new_elves
 	
 def draw(elves):
@@ -103,29 +96,19 @@ def draw(elves):
 
 # part 1
 new_elves = parse_elves(lines)
-print(commaSeparate(*new_elves))
-draw(new_elves)
-old_elves = []
+old_elves = set()
 round = 1
 while new_elves != old_elves:
 	old_elves = new_elves
 	new_elves = move(old_elves, directions)
 	directions = directions[1:4] + directions[0:1]
-	print("round " + str(round))
-	print(commaSeparate(*new_elves))
-	draw(new_elves)
-	#time.sleep(1)
 	if round == 10:
 		min_x = min(transform(new_elves, lambda e: e.x))
 		max_x = max(transform(new_elves, lambda e: e.x))
 		min_y = min(transform(new_elves, lambda e: e.y))
 		max_y = max(transform(new_elves, lambda e: e.y))
 		print((max_x+1-min_x)*(max_y+1-min_y)-len(new_elves))
-		exit()
 	round += 1
-	
-min_x = min(transform(new_elves, lambda e: e.x))
-max_x = max(transform(new_elves, lambda e: e.x))
-min_y = min(transform(new_elves, lambda e: e.y))
-max_y = max(transform(new_elves, lambda e: e.y))
-print((max_x+1-min_x)*(max_y+1-min_y)-len(new_elves))
+
+# part 2
+print(round)
