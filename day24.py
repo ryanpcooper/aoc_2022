@@ -68,10 +68,8 @@ def move_hurricanes(hurricanes, valley_height, valley_width):
 def explore(paths, hurricanes, valley_height, valley_width):
 	hurricane_set = set(hurricanes)
 	new_paths = []
-	option_count = 0
 	for path in paths:
 		for option in OPTIONS:
-			option_count += 1
 			target = path[-1].shift(option)
 			if target == destination:
 				return [path + [destination]]
@@ -82,8 +80,6 @@ def explore(paths, hurricanes, valley_height, valley_width):
 						duplicate = True # we already have a path leading to the same place
 				if not duplicate:
 					new_paths.append(path + [target])
-	print("path count: " + str(len(paths)))
-	print("option count: " + str(option_count))
 	return new_paths
 
 valley_height = len(lines)
@@ -91,22 +87,56 @@ valley_width = len(lines[0])
 
 hurricanes = parse_hurricanes(lines)
 
-current_position = Point(1, 0)
+
+
+# part 1
+starting_position = Point(1,0)
 destination = Point(valley_width-2, valley_height-1)
 
 best_path = None
-paths = [[current_position]]
+paths = [[starting_position]]
 round = 1
 while best_path == None:
-	start = time.time()
 	hurricanes = move_hurricanes(hurricanes, valley_height, valley_width)
-	start = time.time()
 	paths = explore(paths, hurricanes, valley_height, valley_width)
-	for path in paths:
-		if path[-1] == destination:
-			best_path = path
-			break
+	if paths[0][-1] == destination:
+		best_path = paths[0]
 	print("After round " + str(round) + " there are " + str(len(paths)) + " paths.")
 	round += 1
-print(len(best_path)-1)
+	
+distance = len(best_path)-1
+print(distance)
+
+# part 2
+starting_position = destination
+destination = Point(1,0)
+
+best_path = None
+paths = [[starting_position]]
+round = 1
+while best_path == None:
+	hurricanes = move_hurricanes(hurricanes, valley_height, valley_width)
+	paths = explore(paths, hurricanes, valley_height, valley_width)
+	if paths[0][-1] == destination:
+		best_path = paths[0]
+	print("After round " + str(round) + " there are " + str(len(paths)) + " paths.")
+	round += 1
+distance += len(best_path)-1
+
+destination = starting_position
+starting_position = Point(1,0)
+
+best_path = None
+paths = [[starting_position]]
+round = 1
+while best_path == None:
+	hurricanes = move_hurricanes(hurricanes, valley_height, valley_width)
+	paths = explore(paths, hurricanes, valley_height, valley_width)
+	if paths[0][-1] == destination:
+		best_path = paths[0]
+	print("After round " + str(round) + " there are " + str(len(paths)) + " paths.")
+	round += 1
+distance += len(best_path)-1
+print(distance)
+
 
